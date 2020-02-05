@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>GameBoard.qml</file>
+        <file>Tile.qml</file>
+        <file>Button.qml</file>
+    </qresource>
+</RCC>
