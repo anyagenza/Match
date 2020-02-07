@@ -9,15 +9,12 @@ GridView {
     property var firstClickedElement: -1
     property var secondClickedElement: -1
     flow: GridView.FlowTopToBottom
+    signal trembling(string firstElement, string secondElement)
     interactive: false
-    model: GameBoardData { id: model }
-
-    Connections {
-            target: model
-            onNoMatch: {
-               Qt.quit();
-            }
-        }
+//    model: GameBoardData {
+//        //id: model
+//        onNoMatch: view.model.shuffle()
+//    }
 
 
     function check(index){
@@ -42,9 +39,42 @@ GridView {
         }
     }
 
+
     delegate: Item {
+        id: currItem
         width: view.cellWidth
         height: view.cellHeight
+        states: [
+            State {
+                name: "blink"
+                PropertyChanges { target: currTile; scale: 0.7 }
+            },
+
+            State {
+                name: "blink2"
+                PropertyChanges { target: currTile; scale: 1}
+            }
+
+        ]
+
+
+        transitions: [ Transition {
+                from: ""; to: "blink"; //reversible: true
+                NumberAnimation {loops: 5; properties: "scale"; duration: 100; easing.type: Easing.InOutQuad }
+
+//                onRunningChanged: {
+//                    if ((state == "blink") && (!running)) {
+//                        currTile.state = "blink2";
+//                    }
+//                }
+
+            },
+
+            Transition {
+                from: "blink"
+                to: "blink2"
+                NumberAnimation { properties: "scale"; duration: 50000; easing.type: Easing.InOutQuad }
+            }]
 
         Tile {
             id: currTile
@@ -63,12 +93,16 @@ GridView {
             }
 
 
+//            transitions: Transition {
+//                from: ""; to: "down"; //reversible: true
+//                NumberAnimation { properties: "scale"; duration: 500; easing.type: Easing.InOutQuad }
+//                ColorAnimation { duration: 500 }
+
+//            }
 
         }
-
-
-
     }
+
 
     add: Transition {
         NumberAnimation { properties: "y"; from: -100; duration: 4000;
@@ -79,6 +113,7 @@ GridView {
                 view.model.clearMatchAgain();
             }
         }
+
     }
 
     displaced: Transition {

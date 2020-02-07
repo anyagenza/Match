@@ -229,7 +229,7 @@ void GameBoardData::swapElements(int indexFirst, int indexSecond)
             clear();
     }
     else {
-        emit noMatch();
+        emit noMatch(indexFirst, indexSecond);
     }
 
 }

@@ -37,7 +37,7 @@ public:
 
 signals:
     void isMatchChanged();
-    void noMatch();
+    void noMatch(int first, int second);
 
 private:
     QList<int> m_data;
