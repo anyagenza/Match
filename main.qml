@@ -38,21 +38,26 @@ Window {
         height: parent.height - labelRectangle.height
 
         GameBoard {
-            anchors.fill: parent
-            id: game
-            model: GameBoardData {
-
-                onNoMatch: {
-                    var firstElement = game.itemAtIndex(first);
-                    var secondElement = game.itemAtIndex(second);
-                    firstElement.state = "blink";
-                    secondElement.state = "blink";
-                    //firstElement.scale = 1;
-                    //firstElement.height = 40
-                    //game.trembling(firstElement, secondElement);
-                }
-            }
+            modelGame: GameBoardData {}
 
         }
+
+//        GameBoard {
+//            anchors.fill: parent
+//            id: game
+//            model: GameBoardData {
+
+//                onNoMatch: {
+//                    var firstElement = game.itemAtIndex(first);
+//                    var secondElement = game.itemAtIndex(second);
+//                    firstElement.state = "blink";
+//                    secondElement.state = "blink";
+//                    //firstElement.scale = 1;
+//                    //firstElement.height = 40
+//                    //game.trembling(firstElement, secondElement);
+//                }
+//            }
+
+//        }
     }
 }

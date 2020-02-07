@@ -8,13 +8,32 @@ GridView {
     clip: true
     property var firstClickedElement: -1
     property var secondClickedElement: -1
+    property var modelGame : ({})
     flow: GridView.FlowTopToBottom
-    signal trembling(string firstElement, string secondElement)
     interactive: false
-//    model: GameBoardData {
-//        //id: model
-//        onNoMatch: view.model.shuffle()
-//    }
+    model: modelGame
+
+
+        anchors.fill: parent
+       // id: game
+       Connections {
+            target:    modelGame
+            onNoMatch: {
+                var firstElement = view.itemAtIndex(first);
+                var secondElement = view.itemAtIndex(second);
+                firstElement.state = "blink";
+                secondElement.state = "blink";
+                //firstElement.scale = 1;
+                //firstElement.height = 40
+                //game.trembling(firstElement, secondElement);
+            }
+       }
+
+
+
+
+
+
 
 
     function check(index){
