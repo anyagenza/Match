@@ -12,30 +12,16 @@ GridView {
     flow: GridView.FlowTopToBottom
     interactive: false
     model: modelGame
-
-
-        anchors.fill: parent
-       // id: game
-       Connections {
-            target:    modelGame
-            onNoMatch: {
-                var firstElement = view.itemAtIndex(first);
-                var secondElement = view.itemAtIndex(second);
-                firstElement.state = "blink";
-                secondElement.state = "blink";
-                //firstElement.scale = 1;
-                //firstElement.height = 40
-                //game.trembling(firstElement, secondElement);
-            }
-       }
-
-
-
-
-
-
-
-
+    anchors.fill: parent
+    Connections {
+        target:    modelGame
+        onNoMatch: {
+            var firstElement = view.itemAtIndex(firstClickedElement);
+            var secondElement = view.itemAtIndex(secondClickedElement);
+            firstElement.state = "blink";
+            secondElement.state = "blink";
+        }
+    }
     function check(index){
         if (firstClickedElement == -1) {
             firstClickedElement = index;
@@ -78,26 +64,21 @@ GridView {
 
 
         transitions: [ Transition {
-                from: ""; to: "blink"; //reversible: true
-                NumberAnimation {loops: 5; properties: "scale"; duration: 100; easing.type: Easing.InOutQuad }
+                id: trans1
+                //from: ""; to: "blink"; //reversible: true
+                PropertyAnimation {target: currTile; loops: 5; properties: "scale"; duration: 100; easing.type: Easing.InOutQuad }
+                //ScriptAction { script: currTile.state = "blink2" }
+                                onRunningChanged: {
+                                    if ((!running)) {
+                                        currTile.scale = 1;
+                                    }
+                                }
 
-//                onRunningChanged: {
-//                    if ((state == "blink") && (!running)) {
-//                        currTile.state = "blink2";
-//                    }
-//                }
-
-            },
-
-            Transition {
-                from: "blink"
-                to: "blink2"
-                NumberAnimation { properties: "scale"; duration: 50000; easing.type: Easing.InOutQuad }
-            }]
+            }
+        ]
 
         Tile {
             id: currTile
-            //anchors.fill: parent
             color: model.display
             height: parent.height
             width: height
@@ -111,21 +92,13 @@ GridView {
                 onClicked: forClick(index)
             }
 
-
-//            transitions: Transition {
-//                from: ""; to: "down"; //reversible: true
-//                NumberAnimation { properties: "scale"; duration: 500; easing.type: Easing.InOutQuad }
-//                ColorAnimation { duration: 500 }
-
-//            }
-
         }
     }
 
 
     add: Transition {
         NumberAnimation { properties: "y"; from: -100; duration: 4000;
-                          easing.type: Easing.InBack; alwaysRunToEnd: true}
+            easing.type: Easing.InBack; alwaysRunToEnd: true}
         onRunningChanged: {
             if (!running) {
                 console.error("^^^ finished");
@@ -145,11 +118,11 @@ GridView {
         NumberAnimation { properties: "height"; from: view.cellHeight; to: 0; duration: 2000; easing.type: Easing.InBack }
     }
 
-//    removeDisplaced: Transition {
-//        NumberAnimation { properties: "x,y"; duration: 2000; easing.type: Easing.InBack }
-//    }
+    //    removeDisplaced: Transition {
+    //        NumberAnimation { properties: "x,y"; duration: 2000; easing.type: Easing.InBack }
+    //    }
 
-//    populate: Transition {
-//        NumberAnimation { properties: "x,y"; duration: 2000; easing.type: Easing.InBack }
-//    }
+    //    populate: Transition {
+    //        NumberAnimation { properties: "x,y"; duration: 2000; easing.type: Easing.InBack }
+    //    }
 }

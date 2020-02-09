@@ -17,7 +17,7 @@ SOURCES += \
         gameboarddata.cpp \
         main.cpp
 
-RESOURCES += qml.qrc donut_PNG98.png donut_PNG90.png donut_PNG60.png donut_PNG36.png
+RESOURCES += json.hpp input.json qml.qrc donut_PNG98.png donut_PNG90.png donut_PNG60.png donut_PNG36.png
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

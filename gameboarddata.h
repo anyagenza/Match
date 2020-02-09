@@ -15,6 +15,7 @@ class GameBoardData : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QString isMatch READ getIsMatch NOTIFY isMatchChanged)
+    Q_PROPERTY(int score READ getScore NOTIFY isScoreChanged)
 
 public:
     Q_INVOKABLE GameBoardData(int sizeX = 5, int sizeY = 8, int colorCount = 4, QObject* parent = nullptr);
@@ -23,6 +24,7 @@ public:
     Q_INVOKABLE void shuffle();
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    Q_INVOKABLE int getScore();
 private:
     bool ifNear(int first, int second) const;
     bool checkMatch(QList<int>& data);
@@ -34,10 +36,12 @@ private:
 
 public:
     bool getIsMatch();
+    void read(const char* inp = "./input.json");
 
 signals:
     void isMatchChanged();
     void noMatch(int first, int second);
+    void isScoreChanged();
 
 private:
     QList<int> m_data;
@@ -51,4 +55,7 @@ private:
     int m_dimension;
     int m_colorCount;
     bool isMatch;
+    int tempScore;
+public:
+    int score;
 };

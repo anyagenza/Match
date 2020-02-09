@@ -2,16 +2,35 @@
 #include <regex>
 #include <random>
 #include <algorithm>
+#include <fstream>
 #include "gameboarddata.h"
+#include "json.h"
+#include <QJsonArray>
+#include <QJsonParseError>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <json.hpp>
+
+#include <iostream>
+
+using json = nlohmann::json;
+
 
 GameBoardData::GameBoardData(int sizeX, int sizeY, int colorCount, QObject* parent) : QAbstractListModel(parent),
     m_sizeX(sizeX), m_sizeY(sizeY), m_dimension(sizeX * sizeY), m_colorCount(colorCount)
 {
+    read();
     m_colorKey[0] = "red";
     m_colorKey[1] = "green";
     m_colorKey[2] = "blue";
     m_colorKey[3] = "yellow";
     isMatch = 0;
+    score = 0;
+    tempScore = 0;
+    //emit isScoreChanged();
     std::random_device rd;
     std::mt19937 eng(rd());
     std::uniform_int_distribution<> distr(0, colorCount - 1);
@@ -38,12 +57,56 @@ GameBoardData::GameBoardData(int sizeX, int sizeY, int colorCount, QObject* pare
     shuffle();
 }
 
+void GameBoardData::read(const char* inp)
+{
+\
+//    QFile file_obj(QString::fromStdString("./input.json"));
+//    if (!file_obj.exists()) {
+//        exit(1);
+//        // react
+//    }
+//        if (!file_obj.open(QIODevice::ReadOnly|QIODevice::Text)) {
+//        //std::cout << "Failed to open " << file_path << std::endl;
+//        exit(1);
+//        }
+
+//        // step 2
+//        QTextStream file_text(&file_obj);
+//        QString json_string;
+//       json_string = file_text.readAll();
+//       qDebug() << json_string;
+//        file_obj.close();
+//        QByteArray json_bytes = json_string.toLocal8Bit();
+
+//        // step 3
+//        auto json_doc = QJsonDocument::fromJson(json_bytes);
+
+//        QJsonObject json_obj = json_doc.object();
+
+//        // step 4
+//        auto result = json_obj.toVariantMap();
+//        qDebug() << result["color"];
+
+//    std::string str("./input.json");
+//        std::ifstream jsonIfstream(str);
+//        json j = nlohmann::json::parse(jsonIfstream, nullptr, false);
+//        auto i = j["encoding"];
+    std::ifstream i("./input.json");
+    json j;
+    i >> j;
+
+
+}
+
 void GameBoardData::shuffle()
 {
     std::random_device rd;
     std::mt19937 eng(rd());
     std::uniform_int_distribution<> distr(0, m_colorCount - 1);
     isMatch = true;
+    score = 0;
+    tempScore = 0;
+    emit isScoreChanged();
     beginResetModel();
     while (isMatch) {
         for(int i = 0; i < m_dimension; i++) {
@@ -196,6 +259,7 @@ void GameBoardData::clear()
             endInsertRows();
         }
     }
+    emit isScoreChanged();
     setMatchToNull();
 }
 
@@ -204,7 +268,11 @@ void GameBoardData::swapElements(int indexFirst, int indexSecond)
     int offsetForHorizontal = indexFirst < indexSecond ? 1 : 0;
     int offsetForVertical = indexFirst < indexSecond ? 0 : 1;
 
-    QList<int> copyData {m_data.begin(), m_data.end()};
+    QList<int> copyData  = {m_data.begin(), m_data.end()};
+//    QList<int> copyData;
+//    for(auto& el: m_data) {
+//        copyData.push_back(el);
+//    }
     int temp = copyData[indexFirst];
     copyData[indexFirst] = copyData[indexSecond];
     copyData[indexSecond] = temp;
@@ -222,10 +290,20 @@ void GameBoardData::swapElements(int indexFirst, int indexSecond)
                 int temp = m_data[indexFirst];
                 m_data[indexFirst] = m_data[indexSecond];
                 m_data[indexSecond] = temp;
+                for (int i = 0; i < m_sizeY; i++) {
+                    for (int j = 0; j < m_sizeX; j++) {
+                        if (match[i][j] >= 3) {
+                            tempScore++;
+                        }
+                    }
+                }
+                score = tempScore;
+                emit isScoreChanged();
                 endMoveRows();
             }
             endResetModel();
             isMatch = checkMatch(m_data);
+            //emit isScoreChanged();
             clear();
     }
     else {
@@ -238,8 +316,17 @@ void GameBoardData::clearMatchAgain()
 {
     if (isMatch) {
         isMatch = checkMatch(m_data);
+        for (int i = 0; i < m_sizeY; i++) {
+            for (int j = 0; j < m_sizeX; j++) {
+                if (match[i][j] >= 3) {
+                    tempScore++;
+                }
+            }
+        }
+        score = tempScore;
+        emit isScoreChanged();
         clear();
-        isMatch = checkMatch(m_data);
+        //isMatch = checkMatch(m_data);
         qDebug() << "call";
 
     }
@@ -262,6 +349,11 @@ int GameBoardData::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_data.count();
+}
+
+int GameBoardData::getScore()
+{
+    return score;
 }
 
 

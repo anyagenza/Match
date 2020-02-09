@@ -3,6 +3,7 @@
 #include <gameboarddata.h>
 #include <QDebug>
 #include <QQuickView>
+#include "json.hpp"
 
 int main(int argc, char *argv[])
 {

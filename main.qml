@@ -13,6 +13,23 @@ Window {
         width: parent.width
         height: parent.height / 10
 
+        Rectangle {
+            id: textRectangle
+            width: 100
+            height: labelRectangle.height / 2
+            color: "white"
+            x: parent.width / 12
+            anchors.verticalCenter: button.verticalCenter
+            border.color: "indianred"
+            border.width: 2
+            Text {
+                anchors.centerIn: textRectangle
+                //anchors.fill: parent
+                color: "indianred"
+                text: game.model.score.toString()
+            }
+        }
+
         Button {
             id: button
             width: 100
@@ -38,6 +55,7 @@ Window {
         height: parent.height - labelRectangle.height
 
         GameBoard {
+            id: game
             modelGame: GameBoardData {}
 
         }
