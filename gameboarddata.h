@@ -1,6 +1,8 @@
 #pragma once
 #include <QAbstractItemModel>
 #include <QList>
+#include <regex>
+#include <random>
 
 struct Inx {
     int y;
@@ -35,6 +37,7 @@ private:
     void checkMatchVertical();
     void clear();
     void setMatchToNull();
+    void moveElements(int indexFirst, int indexSecond);
 
 signals:
     void isMatchChanged();

@@ -1,6 +1,4 @@
 #include <QDebug>
-#include <regex>
-#include <random>
 #include <algorithm>
 #include <fstream>
 #include "gameboarddata.h"
@@ -133,7 +131,6 @@ void GameBoardData::checkMatchVertical()
     }
 }
 
-
 bool GameBoardData::checkMatch(QList<int>& m_data)
 {
     for (int x = 0; x < m_sizeY; x++) {
@@ -214,43 +211,47 @@ void GameBoardData::clear()
     setMatchToNull();
 }
 
-void GameBoardData::swapElements(int indexFirst, int indexSecond)
+void GameBoardData::moveElements(int indexFirst, int indexSecond)
 {
     int offsetForHorizontal = indexFirst < indexSecond ? 1 : 0;
     int offsetForVertical = indexFirst < indexSecond ? 0 : 1;
+    if (ifNear(indexFirst, indexSecond)) {
+        if (std::abs(indexSecond - indexFirst) == 1) {
+            beginMoveRows(QModelIndex(),indexFirst,indexFirst,QModelIndex(),indexSecond + offsetForHorizontal);
+            endMoveRows();
+        } else if (std::abs(indexSecond - indexFirst) == m_sizeY) {
+            beginMoveRows(QModelIndex(),indexFirst,indexFirst,QModelIndex(),indexSecond);
+            endMoveRows();
+            beginMoveRows(QModelIndex(), indexSecond + offsetForVertical,
+                          indexSecond + offsetForVertical, QModelIndex(), indexFirst + offsetForVertical);
+            endMoveRows();
+        }
+        int temp = m_data[indexFirst];
+        m_data[indexFirst] = m_data[indexSecond];
+        m_data[indexSecond] = temp;
+        for (int i = 0; i < m_sizeY; i++) {
+            for (int j = 0; j < m_sizeX; j++) {
+                if (match[i][j] >= 3) {
+                    tempScore++;
+                }
+            }
+        }
+        score = tempScore;
+        emit isScoreChanged();
+    }
+    isMatch = checkMatch(m_data);
+    emit isScoreChanged();
+}
 
+void GameBoardData::swapElements(int indexFirst, int indexSecond)
+{
     QList<int> copyData  = {m_data.begin(), m_data.end()};
     int temp = copyData[indexFirst];
     copyData[indexFirst] = copyData[indexSecond];
     copyData[indexSecond] = temp;
 
     if (checkMatch(copyData)) {
-        if (ifNear(indexFirst, indexSecond)) {
-            if (std::abs(indexSecond - indexFirst) == 1) {
-                beginMoveRows(QModelIndex(),indexFirst,indexFirst,QModelIndex(),indexSecond + offsetForHorizontal);
-                endMoveRows();
-            } else if (std::abs(indexSecond - indexFirst) == m_sizeY) {
-                beginMoveRows(QModelIndex(),indexFirst,indexFirst,QModelIndex(),indexSecond);
-                endMoveRows();
-                beginMoveRows(QModelIndex(), indexSecond + offsetForVertical,
-                              indexSecond + offsetForVertical, QModelIndex(), indexFirst + offsetForVertical);
-                endMoveRows();
-            }
-            int temp = m_data[indexFirst];
-            m_data[indexFirst] = m_data[indexSecond];
-            m_data[indexSecond] = temp;
-            for (int i = 0; i < m_sizeY; i++) {
-                for (int j = 0; j < m_sizeX; j++) {
-                    if (match[i][j] >= 3) {
-                        tempScore++;
-                    }
-                }
-            }
-            score = tempScore;
-            emit isScoreChanged();
-        }
-        isMatch = checkMatch(m_data);
-        emit isScoreChanged();
+        moveElements(indexFirst, indexSecond);
     }
     else {
         emit noMatch(indexFirst, indexSecond);
