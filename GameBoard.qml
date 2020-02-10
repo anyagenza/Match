@@ -3,24 +3,32 @@ import gameboard.data 1.0
 
 GridView {
     id: view
-    cellWidth: width / 5
-    cellHeight: height / 8
+    cellWidth: width / view.model.m_sizeX
+    cellHeight: height / view.model.m_sizeY
     clip: true
     property var firstClickedElement: -1
     property var secondClickedElement: -1
+    property var firstElement
+    property var secondElement
     property var modelGame : ({})
     flow: GridView.FlowTopToBottom
     interactive: false
     model: modelGame
     anchors.fill: parent
+
     Connections {
         target:    modelGame
         onNoMatch: {
-            var firstElement = view.itemAtIndex(firstClickedElement);
-            var secondElement = view.itemAtIndex(secondClickedElement);
-            firstElement.state = "blink";
-            secondElement.state = "blink";
+            firstElement = view.itemAtIndex(firstClickedElement);
+            secondElement = view.itemAtIndex(secondClickedElement);
+            animationBad.start();
         }
+    }
+
+    SequentialAnimation {
+        id: animationBad
+        NumberAnimation { targets: [firstElement ,secondElement]; property: "opacity"; to: 0.2; duration: 500}
+        NumberAnimation { targets: [firstElement, secondElement]; property: "opacity"; to: 1; duration: 500 }
     }
     function check(index){
         if (firstClickedElement == -1) {
@@ -44,45 +52,18 @@ GridView {
         }
     }
 
-
     delegate: Item {
         id: currItem
         width: view.cellWidth
         height: view.cellHeight
-        states: [
-            State {
-                name: "blink"
-                PropertyChanges { target: currTile; scale: 0.7 }
-            },
-
-            State {
-                name: "blink2"
-                PropertyChanges { target: currTile; scale: 1}
-            }
-
-        ]
-
-
-        transitions: [ Transition {
-                id: trans1
-                //from: ""; to: "blink"; //reversible: true
-                PropertyAnimation {target: currTile; loops: 5; properties: "scale"; duration: 100; easing.type: Easing.InOutQuad }
-                //ScriptAction { script: currTile.state = "blink2" }
-                                onRunningChanged: {
-                                    if ((!running)) {
-                                        currTile.scale = 1;
-                                    }
-                                }
-
-            }
-        ]
 
         Tile {
             id: currTile
             color: model.display
-            height: parent.height
-            width: height
+            height: width
+            width: currItem.height
             radius: width / 2
+
             Text {
                 text: index
             }
@@ -95,34 +76,31 @@ GridView {
         }
     }
 
-
     add: Transition {
-        NumberAnimation { properties: "y"; from: -100; duration: 4000;
+        NumberAnimation { properties: "y"; from: -view.height/3 + y - 100 ; duration: 1000;
             easing.type: Easing.InBack; alwaysRunToEnd: true}
         onRunningChanged: {
             if (!running) {
-                console.error("^^^ finished");
                 view.model.clearMatchAgain();
             }
         }
-
     }
 
-    displaced: Transition {
-        NumberAnimation { properties: "y"; duration: 4000; easing.type: Easing.InBack
+    move: Transition {
+
+        NumberAnimation { properties: "x,y"; duration: 1000;  }
+        onRunningChanged: {
+            if (!running) {
+                view.model.clearMatchAgain();
+            }
         }
     }
 
-    remove: Transition {
-        NumberAnimation { properties: "width"; from: view.cellWidth; to: 0; duration: 2000; easing.type: Easing.InBack }
-        NumberAnimation { properties: "height"; from: view.cellHeight; to: 0; duration: 2000; easing.type: Easing.InBack }
+    displaced: Transition {
+        NumberAnimation { properties: "y"; duration: 1000; easing.type: Easing.InBack }
     }
 
-    //    removeDisplaced: Transition {
-    //        NumberAnimation { properties: "x,y"; duration: 2000; easing.type: Easing.InBack }
-    //    }
-
-    //    populate: Transition {
-    //        NumberAnimation { properties: "x,y"; duration: 2000; easing.type: Easing.InBack }
-    //    }
+    remove: Transition {
+        NumberAnimation { properties: "scale"; to: 0; duration: 500; easing.type: Easing.InBack }
+    }
 }

@@ -24,7 +24,6 @@ Window {
             border.width: 2
             Text {
                 anchors.centerIn: textRectangle
-                //anchors.fill: parent
                 color: "indianred"
                 text: game.model.score.toString()
             }
@@ -57,25 +56,6 @@ Window {
         GameBoard {
             id: game
             modelGame: GameBoardData {}
-
         }
-
-//        GameBoard {
-//            anchors.fill: parent
-//            id: game
-//            model: GameBoardData {
-
-//                onNoMatch: {
-//                    var firstElement = game.itemAtIndex(first);
-//                    var secondElement = game.itemAtIndex(second);
-//                    firstElement.state = "blink";
-//                    secondElement.state = "blink";
-//                    //firstElement.scale = 1;
-//                    //firstElement.height = 40
-//                    //game.trembling(firstElement, secondElement);
-//                }
-//            }
-
-//        }
     }
 }

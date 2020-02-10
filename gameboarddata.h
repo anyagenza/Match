@@ -2,10 +2,6 @@
 #include <QAbstractItemModel>
 #include <QList>
 
-//struct KeyColor {
-//    int key;
-//    QString color;
-//};
 struct Inx {
     int y;
     int x;
@@ -16,15 +12,22 @@ class GameBoardData : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QString isMatch READ getIsMatch NOTIFY isMatchChanged)
     Q_PROPERTY(int score READ getScore NOTIFY isScoreChanged)
+    Q_PROPERTY(int m_sizeX READ getSizeX)
+    Q_PROPERTY(int m_sizeY READ getSizeY)
 
 public:
     Q_INVOKABLE GameBoardData(int sizeX = 5, int sizeY = 8, int colorCount = 4, QObject* parent = nullptr);
     Q_INVOKABLE void swapElements(int indexFirst, int indexSecond);
     Q_INVOKABLE void clearMatchAgain();
     Q_INVOKABLE void shuffle();
+    Q_INVOKABLE int getScore();
+    Q_INVOKABLE int getSizeX();
+    Q_INVOKABLE int getSizeY();
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    Q_INVOKABLE int getScore();
+    bool getIsMatch();
+    void read(std::string inp = ":/input.json");
+
 private:
     bool ifNear(int first, int second) const;
     bool checkMatch(QList<int>& data);
@@ -32,11 +35,6 @@ private:
     void checkMatchVertical();
     void clear();
     void setMatchToNull();
-
-
-public:
-    bool getIsMatch();
-    void read(const char* inp = "./input.json");
 
 signals:
     void isMatchChanged();
@@ -56,6 +54,8 @@ private:
     int m_colorCount;
     bool isMatch;
     int tempScore;
+    std::random_device rd;
+    std::mt19937 eng;
 public:
     int score;
 };
