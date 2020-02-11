@@ -4,6 +4,7 @@
         <file>GameBoard.qml</file>
         <file>Tile.qml</file>
         <file>Button.qml</file>
-	<file>input.json</file>
+        <file>input.json</file>
+        <file>MessageGameOver.qml</file>
     </qresource>
 </RCC>

@@ -3,13 +3,18 @@ import QtQuick.Window 2.14
 import gameboard.data 1.0
 
 Window {
+    id: windowMain
     visible: true
     width: 480
     height: 640
-    title: qsTr("Hello World")
+
+    property var windowWidth : width;
+    property var windowHeight : height;
+    property var rectHeigth: height
 
     Rectangle {
         id: labelRectangle
+        color: "black"
         width: parent.width
         height: parent.height / 10
 
@@ -28,6 +33,22 @@ Window {
                 text: game.model.score.toString()
             }
         }
+
+        Rectangle {
+            id: checkGameOver
+            width: 100
+            height: labelRectangle.height / 2
+            color: "white"
+            x: parent.width / 1.5
+            anchors.verticalCenter: button.verticalCenter
+            border.color: "indianred"
+            border.width: 2
+            MouseArea {
+                anchors.fill: parent
+                //onClicked: game.model.ifGameOver()
+            }
+        }
+
 
         Button {
             id: button

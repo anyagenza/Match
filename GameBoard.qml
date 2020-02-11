@@ -3,8 +3,8 @@ import gameboard.data 1.0
 
 GridView {
     id: view
-    cellWidth: width / view.model.m_sizeX
-    cellHeight: height / view.model.m_sizeY
+    cellWidth: windowWidth / view.model.m_sizeX
+    cellHeight:  (9 * windowHeight / 10) / view.model.m_sizeY
     clip: true
     property var firstClickedElement: -1
     property var secondClickedElement: -1
@@ -54,8 +54,8 @@ GridView {
 
     delegate: Item {
         id: currItem
-        width: view.cellWidth
-        height: view.cellHeight
+        width: view.cellWidth > view.cellHeight ? cellHeight : cellWidth
+        height: width
 
         Tile {
             id: currTile
@@ -82,6 +82,9 @@ GridView {
         onRunningChanged: {
             if (!running) {
                 view.model.clearMatchAgain();
+                if (game.model.ifGameOver()) {
+                    messageLoader.source = "MessageGameOver.qml";
+                }
             }
         }
     }
@@ -102,5 +105,9 @@ GridView {
 
     remove: Transition {
         NumberAnimation { properties: "scale"; to: 0; duration: 500; easing.type: Easing.InBack }
+    }
+    Loader {
+        id: messageLoader
+        anchors.fill: parent
     }
 }

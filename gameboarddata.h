@@ -14,8 +14,8 @@ class GameBoardData : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QString isMatch READ getIsMatch NOTIFY isMatchChanged)
     Q_PROPERTY(int score READ getScore NOTIFY isScoreChanged)
-    Q_PROPERTY(int m_sizeX READ getSizeX)
-    Q_PROPERTY(int m_sizeY READ getSizeY)
+    Q_PROPERTY(int m_sizeX READ getSizeX CONSTANT)
+    Q_PROPERTY(int m_sizeY READ getSizeY CONSTANT)
 
 public:
     Q_INVOKABLE GameBoardData(int sizeX = 5, int sizeY = 8, int colorCount = 4, QObject* parent = nullptr);
@@ -25,6 +25,9 @@ public:
     Q_INVOKABLE int getScore();
     Q_INVOKABLE int getSizeX();
     Q_INVOKABLE int getSizeY();
+    Q_INVOKABLE bool ifGameOver();
+    Q_INVOKABLE bool ifGameOverVertical();
+    Q_INVOKABLE bool ifGameOverHorizontal();
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     bool getIsMatch();

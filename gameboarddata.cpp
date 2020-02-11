@@ -79,7 +79,7 @@ void GameBoardData::shuffle()
     tempScore = 0;
     emit isScoreChanged();
     beginResetModel();
-    while (isMatch) {
+    while ((isMatch) || (ifGameOver())) {
         for(int i = 0; i < m_dimension; i++) {
             int randColorKey = distr(eng);
             m_data[i] = randColorKey;
@@ -307,4 +307,139 @@ int GameBoardData::getSizeX()
 int GameBoardData::getSizeY()
 {
     return m_sizeY;
+}
+
+bool GameBoardData::ifGameOver()
+{
+    if (ifGameOverVertical() && ifGameOverHorizontal()) {
+        qDebug() << "GameOver";
+        return true;
+    }
+    return false;
+}
+
+bool GameBoardData::ifGameOverHorizontal()
+{
+    QList<QList<int>> checkList;
+    for (int i = 0; i < m_sizeY; i++)
+    {
+        checkList.append(QList<int>());
+        for (int j = 0; j < m_sizeX; j++)
+        {
+            checkList[i].append(int());
+        }
+    }
+    for (int x = 0; x < m_sizeX; x++) {
+        for (int k = 0; k < m_sizeY; k++) {
+            checkList[k][x] = m_data[m_sizeY * x + k];
+        }
+    }
+    //qDebug() << checkList;
+    for (int i = 0; i < m_sizeY - 1; i++) {
+        for (int j = 0; j < m_sizeX - 2; j++) {
+            if ((checkList[i][j] == checkList[i][j+1]) && (checkList[i][j] == checkList[i+1][j+2])) {
+//                qDebug() << checkList[i][j] << checkList[i][j+1] << checkList[i+1][j+2];
+//                qDebug() << "1"<< " " << i << " " << j;
+                return false;
+            }
+            if ((checkList[i][j] == checkList[i + 1][j + 1]) && (checkList[i][j] == checkList[i][j + 2])) {
+                //qDebug() << "2"<< " " << i << " " << j;
+                return false;
+            }
+            if ((checkList[i + 1][j] == checkList[i][j+1]) && (checkList[i + 1][j] == checkList[i][j+2])) {
+                //qDebug() << "3"<< " " << i << " " << j;
+                return false;
+            }
+            if (j + 3 < m_sizeX) {
+                if ((checkList[i][j] == checkList[i][j+1]) && (checkList[i][j]== checkList[i][j + 3])) {
+                    //qDebug() << "4"<< " " << i << " " << j;
+                    return false;
+                }
+                if ((checkList[i][j] == checkList[i][j + 2]) && (checkList[i][j] == checkList[i][j + 3])) {
+                   // qDebug() << "5" << " " << i << " " << j;
+                    return false;
+                }
+            }
+
+            if ((checkList[i][j] == checkList[i+1][j+1]) && (checkList[i][j] == checkList[i+1][j+2])) {
+                return false;
+            }
+            if ((checkList[i + 1][j] == checkList[i][j+1]) && (checkList[i + 1][j] == checkList[i+1][j+2])) {
+                return false;
+            }
+            if ((checkList[i + 1][j] == checkList[i+1][j+1]) && (checkList[i + 1][j] == checkList[i][j+2])) {
+                return false;
+            }
+        }
+    }
+    //exit(1);
+    //qDebug() << "horiiizontal";
+    return true;
+
+
+}
+
+bool GameBoardData::ifGameOverVertical()
+{
+    QList<QList<int>> checkList;
+    for (int i = 0; i < m_sizeX; i++)
+    {
+        checkList.append(QList<int>());
+        for (int j = 0; j < m_sizeY; j++)
+        {
+            checkList[i].append(int());
+        }
+    }
+    for (int i = 0; i < m_sizeX; i++) {
+        for (int j = 0; j < m_sizeY; j++) {
+            checkList[i][j] = m_data[m_sizeY * i + j];
+        }
+    }
+    //qDebug() << m_data;
+    //qDebug() << checkList;
+    for (int i = 0; i < m_sizeX ; i++) {
+        for (int j = 0; j < m_sizeY - 2; j++) {
+            if (i < m_sizeX - 1) {
+                if ((checkList[i][j] == checkList[i][j+1]) && (checkList[i][j] == checkList[i+1][j+2])) {
+//                    qDebug() << checkList[i][j] << checkList[i][j+1] << checkList[i+1][j+2];
+//                    qDebug() << "1"<< " " << i << " " << j;
+                    return false;
+                }
+                if ((checkList[i][j] == checkList[i + 1][j + 1]) && (checkList[i][j] == checkList[i][j + 2])) {
+                    //qDebug() << "2"<< " " << i << " " << j;
+                    return false;
+                }
+                if ((checkList[i + 1][j] == checkList[i][j+1]) && (checkList[i + 1][j] == checkList[i][j+2])) {
+                    //qDebug() << "3"<< " " << i << " " << j;
+                    return false;
+                }
+                if ((checkList[i][j] == checkList[i+1][j+1]) && (checkList[i][j] == checkList[i+1][j+2])) {
+                   // qDebug() << "6" << " " << i << " " << j;
+                    return false;
+                }
+                if ((checkList[i + 1][j] == checkList[i][j+1]) && (checkList[i + 1][j] == checkList[i+1][j+2])) {
+                    //qDebug() << "7" << " " << i << " " << j;
+                    return false;
+                }
+                if ((checkList[i + 1][j] == checkList[i+1][j+1]) && (checkList[i + 1][j] == checkList[i][j+2])) {
+                    //qDebug() << "8" << " " << i << " " << j;
+                    return false;
+                }
+            }
+            if (j + 3 < m_sizeY) {
+                if ((checkList[i][j] == checkList[i][j+1]) && (checkList[i][j]== checkList[i][j + 3])) {
+                    //qDebug() << "4"<< " " << i << " " << j;
+                    return false;
+                }
+                if ((checkList[i][j] == checkList[i][j + 2]) && (checkList[i][j] == checkList[i][j + 3])) {
+                    //qDebug() << "5" << " " << i << " " << j;
+                    return false;
+                }
+            }
+        }
+    }
+   // qDebug() << "vertiiical";
+    return true;
+
+
 }

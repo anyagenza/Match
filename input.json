@@ -1,5 +1,5 @@
 {
         "width": 5 ,
         "height" : 8 ,
-        "colorNames" : [ "green", "yellow", "blue", "red", "brown"]
+        "colorNames" : [ "green", "yellow", "blue", "red", "brown", "white", "black", "blueviolet", "darkcyan"]
 }
