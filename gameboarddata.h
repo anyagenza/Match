@@ -60,7 +60,6 @@ private:
     int m_dimension;
     int m_colorCount;
     bool isMatch;
-    int tempScore;
     std::random_device rd;
     std::mt19937 eng;
 public:

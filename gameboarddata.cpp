@@ -23,7 +23,6 @@ GameBoardData::GameBoardData(int sizeX, int sizeY, int colorCount, QObject* pare
     }
     isMatch = 0;
     score = 0;
-    tempScore = 0;
     std::uniform_int_distribution<> distr(0, colorCount - 1);
 
     for (int i = 0; i < m_sizeY; i++)
@@ -82,7 +81,6 @@ void GameBoardData::shuffle()
     std::uniform_int_distribution<> distr(0, m_colorCount - 1);
     isMatch = true;
     score = 0;
-    tempScore = 0;
     emit isScoreChanged();
     beginResetModel();
     while ((isMatch) || (ifGameOver())) {
@@ -196,6 +194,8 @@ void GameBoardData::clear()
     for (int i = 0; i < m_sizeY; i++) {
         m.insert(i,0);
     }
+    score += q.size();
+    emit isScoreChanged();
     while (!q.isEmpty()) {
         int forRemove = q.back();
         q.pop_back();
@@ -235,18 +235,9 @@ void GameBoardData::moveElements(int indexFirst, int indexSecond)
         int temp = m_data[indexFirst];
         m_data[indexFirst] = m_data[indexSecond];
         m_data[indexSecond] = temp;
-        for (int i = 0; i < m_sizeY; i++) {
-            for (int j = 0; j < m_sizeX; j++) {
-                if (match[i][j] >= 3) {
-                    tempScore++;
-                }
-            }
-        }
-        score = tempScore;
         emit isScoreChanged();
     }
     isMatch = checkMatch(m_data);
-    emit isScoreChanged();
 }
 
 void GameBoardData::swapElements(int indexFirst, int indexSecond)
@@ -268,15 +259,6 @@ void GameBoardData::clearMatchAgain()
 {
     if (isMatch) {
         isMatch = checkMatch(m_data);
-        for (int i = 0; i < m_sizeY; i++) {
-            for (int j = 0; j < m_sizeX; j++) {
-                if (match[i][j] >= 3) {
-                    tempScore++;
-                }
-            }
-        }
-        score = tempScore;
-        emit isScoreChanged();
         clear();
     }
 }

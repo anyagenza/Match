@@ -13,7 +13,12 @@ Window {
 
     Rectangle {
         id: labelRectangle
-        color: "black"
+
+        gradient: Gradient {
+                GradientStop { position: 0.0; color: "red" }
+                GradientStop { position: 0.33; color: "yellow" }
+                GradientStop { position: 1.0; color: "green" }
+            }
         width: parent.width
         height: parent.height / 10
 
@@ -21,7 +26,7 @@ Window {
             id: textRectangle
             width: 100
             height: labelRectangle.height / 2
-            color: "white"
+
             x: parent.width / 12
             anchors.verticalCenter: button.verticalCenter
             border.color: "indianred"
@@ -56,6 +61,26 @@ Window {
         y: labelRectangle.height
         width: parent.width
         height: parent.height - labelRectangle.height
+
+        gradient: Gradient {
+                     GradientStop {
+                         position: 0.0
+                         SequentialAnimation on color {
+                             loops: Animation.Infinite
+                             ColorAnimation { from: "DeepSkyBlue"; to: "#0E1533"; duration: 5000 }
+                             ColorAnimation { from: "#0E1533"; to: "DeepSkyBlue"; duration: 5000 }
+                         }
+                     }
+                     GradientStop {
+                         position: 1.0
+                         SequentialAnimation on color {
+                             loops: Animation.Infinite
+                             ColorAnimation { from: "SkyBlue"; to: "#437284"; duration: 5000 }
+                             ColorAnimation { from: "#437284"; to: "SkyBlue"; duration: 5000 }
+                         }
+                     }
+                 }
+
 
         GameBoard {
             id: game
