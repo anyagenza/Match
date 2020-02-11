@@ -10,7 +10,6 @@ Window {
 
     property var windowWidth : width;
     property var windowHeight : height;
-    property var rectHeigth: height
 
     Rectangle {
         id: labelRectangle
@@ -33,22 +32,6 @@ Window {
                 text: game.model.score.toString()
             }
         }
-
-        Rectangle {
-            id: checkGameOver
-            width: 100
-            height: labelRectangle.height / 2
-            color: "white"
-            x: parent.width / 1.5
-            anchors.verticalCenter: button.verticalCenter
-            border.color: "indianred"
-            border.width: 2
-            MouseArea {
-                anchors.fill: parent
-                //onClicked: game.model.ifGameOver()
-            }
-        }
-
 
         Button {
             id: button

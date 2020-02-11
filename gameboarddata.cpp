@@ -15,6 +15,12 @@ GameBoardData::GameBoardData(int sizeX, int sizeY, int colorCount, QObject* pare
     m_sizeX(sizeX), m_sizeY(sizeY), m_dimension(sizeX * sizeY), m_colorCount(colorCount), rd(), eng(rd())
 {
     read(":/input.json");
+    if (m_sizeX < 3) {
+        m_sizeX = 3;
+    }
+    if (m_sizeY < 3) {
+        m_sizeY = 3;
+    }
     isMatch = 0;
     score = 0;
     tempScore = 0;
@@ -316,6 +322,19 @@ bool GameBoardData::ifGameOver()
         return true;
     }
     return false;
+
+}
+
+void GameBoardData::initCheckList(QList<QList<int>>& checkList)
+{
+    for (int i = 0; i < m_sizeY; i++)
+    {
+        checkList.append(QList<int>());
+        for (int j = 0; j < m_sizeX; j++)
+        {
+            checkList[i].append(int());
+        }
+    }
 }
 
 bool GameBoardData::ifGameOverHorizontal()
@@ -334,29 +353,22 @@ bool GameBoardData::ifGameOverHorizontal()
             checkList[k][x] = m_data[m_sizeY * x + k];
         }
     }
-    //qDebug() << checkList;
     for (int i = 0; i < m_sizeY - 1; i++) {
         for (int j = 0; j < m_sizeX - 2; j++) {
             if ((checkList[i][j] == checkList[i][j+1]) && (checkList[i][j] == checkList[i+1][j+2])) {
-//                qDebug() << checkList[i][j] << checkList[i][j+1] << checkList[i+1][j+2];
-//                qDebug() << "1"<< " " << i << " " << j;
                 return false;
             }
             if ((checkList[i][j] == checkList[i + 1][j + 1]) && (checkList[i][j] == checkList[i][j + 2])) {
-                //qDebug() << "2"<< " " << i << " " << j;
                 return false;
             }
             if ((checkList[i + 1][j] == checkList[i][j+1]) && (checkList[i + 1][j] == checkList[i][j+2])) {
-                //qDebug() << "3"<< " " << i << " " << j;
                 return false;
             }
             if (j + 3 < m_sizeX) {
                 if ((checkList[i][j] == checkList[i][j+1]) && (checkList[i][j]== checkList[i][j + 3])) {
-                    //qDebug() << "4"<< " " << i << " " << j;
                     return false;
                 }
                 if ((checkList[i][j] == checkList[i][j + 2]) && (checkList[i][j] == checkList[i][j + 3])) {
-                   // qDebug() << "5" << " " << i << " " << j;
                     return false;
                 }
             }
@@ -372,8 +384,7 @@ bool GameBoardData::ifGameOverHorizontal()
             }
         }
     }
-    //exit(1);
-    //qDebug() << "horiiizontal";
+
     return true;
 
 
@@ -395,51 +406,38 @@ bool GameBoardData::ifGameOverVertical()
             checkList[i][j] = m_data[m_sizeY * i + j];
         }
     }
-    //qDebug() << m_data;
-    //qDebug() << checkList;
     for (int i = 0; i < m_sizeX ; i++) {
         for (int j = 0; j < m_sizeY - 2; j++) {
             if (i < m_sizeX - 1) {
                 if ((checkList[i][j] == checkList[i][j+1]) && (checkList[i][j] == checkList[i+1][j+2])) {
-//                    qDebug() << checkList[i][j] << checkList[i][j+1] << checkList[i+1][j+2];
-//                    qDebug() << "1"<< " " << i << " " << j;
                     return false;
                 }
                 if ((checkList[i][j] == checkList[i + 1][j + 1]) && (checkList[i][j] == checkList[i][j + 2])) {
-                    //qDebug() << "2"<< " " << i << " " << j;
                     return false;
                 }
                 if ((checkList[i + 1][j] == checkList[i][j+1]) && (checkList[i + 1][j] == checkList[i][j+2])) {
-                    //qDebug() << "3"<< " " << i << " " << j;
                     return false;
                 }
                 if ((checkList[i][j] == checkList[i+1][j+1]) && (checkList[i][j] == checkList[i+1][j+2])) {
-                   // qDebug() << "6" << " " << i << " " << j;
                     return false;
                 }
                 if ((checkList[i + 1][j] == checkList[i][j+1]) && (checkList[i + 1][j] == checkList[i+1][j+2])) {
-                    //qDebug() << "7" << " " << i << " " << j;
                     return false;
                 }
                 if ((checkList[i + 1][j] == checkList[i+1][j+1]) && (checkList[i + 1][j] == checkList[i][j+2])) {
-                    //qDebug() << "8" << " " << i << " " << j;
                     return false;
                 }
             }
             if (j + 3 < m_sizeY) {
                 if ((checkList[i][j] == checkList[i][j+1]) && (checkList[i][j]== checkList[i][j + 3])) {
-                    //qDebug() << "4"<< " " << i << " " << j;
                     return false;
                 }
                 if ((checkList[i][j] == checkList[i][j + 2]) && (checkList[i][j] == checkList[i][j + 3])) {
-                    //qDebug() << "5" << " " << i << " " << j;
                     return false;
                 }
             }
         }
     }
-   // qDebug() << "vertiiical";
     return true;
-
-
 }
+

@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE bool ifGameOver();
     Q_INVOKABLE bool ifGameOverVertical();
     Q_INVOKABLE bool ifGameOverHorizontal();
+    void initCheckList(QList<QList<int>>& checkList);
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     bool getIsMatch();

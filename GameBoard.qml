@@ -64,10 +64,6 @@ GridView {
             width: currItem.height
             radius: width / 2
 
-            Text {
-                text: index
-            }
-
             MouseArea {
                 anchors.fill: parent
                 onClicked: forClick(index)
@@ -84,6 +80,7 @@ GridView {
                 view.model.clearMatchAgain();
                 if (game.model.ifGameOver()) {
                     messageLoader.source = "MessageGameOver.qml";
+                    messageLoader.item.open();
                 }
             }
         }
@@ -106,8 +103,14 @@ GridView {
     remove: Transition {
         NumberAnimation { properties: "scale"; to: 0; duration: 500; easing.type: Easing.InBack }
     }
+
     Loader {
         id: messageLoader
         anchors.fill: parent
+    }
+
+    Connections {
+        target: messageLoader.item
+        onYes: view.model.shuffle()
     }
 }
