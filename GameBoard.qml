@@ -73,6 +73,7 @@ GridView {
     }
 
     add: Transition {
+
         NumberAnimation { properties: "y"; from: -view.height/3 + y - 100 ; duration: 1000;
             easing.type: Easing.InBack; alwaysRunToEnd: true}
         onRunningChanged: {
@@ -97,10 +98,12 @@ GridView {
     }
 
     displaced: Transition {
+
         NumberAnimation { properties: "y"; duration: 1000; easing.type: Easing.InBack }
     }
 
     remove: Transition {
+
         NumberAnimation { properties: "scale"; to: 0; duration: 500; easing.type: Easing.InBack }
     }
 

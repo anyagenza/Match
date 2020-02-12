@@ -22,17 +22,14 @@ public:
     Q_INVOKABLE void swapElements(int indexFirst, int indexSecond);
     Q_INVOKABLE void clearMatchAgain();
     Q_INVOKABLE void shuffle();
-    Q_INVOKABLE int getScore();
-    Q_INVOKABLE int getSizeX();
-    Q_INVOKABLE int getSizeY();
     Q_INVOKABLE bool ifGameOver();
-    Q_INVOKABLE bool ifGameOverVertical();
-    Q_INVOKABLE bool ifGameOverHorizontal();
-    void initCheckList(QList<QList<int>>& checkList);
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     bool getIsMatch();
     void read(std::string inp = ":/input.json");
+    int getScore();
+    int getSizeX();
+    int getSizeY();
 
 private:
     bool ifNear(int first, int second) const;
@@ -42,6 +39,8 @@ private:
     void clear();
     void setMatchToNull();
     void moveElements(int indexFirst, int indexSecond);
+    bool ifGameOverVertical();
+    bool ifGameOverHorizontal();
 
 signals:
     void isMatchChanged();

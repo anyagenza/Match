@@ -307,18 +307,6 @@ bool GameBoardData::ifGameOver()
 
 }
 
-void GameBoardData::initCheckList(QList<QList<int>>& checkList)
-{
-    for (int i = 0; i < m_sizeY; i++)
-    {
-        checkList.append(QList<int>());
-        for (int j = 0; j < m_sizeX; j++)
-        {
-            checkList[i].append(int());
-        }
-    }
-}
-
 bool GameBoardData::ifGameOverHorizontal()
 {
     QList<QList<int>> checkList;
@@ -422,4 +410,3 @@ bool GameBoardData::ifGameOverVertical()
     }
     return true;
 }
-

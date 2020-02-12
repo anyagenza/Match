@@ -31,6 +31,7 @@ Window {
             anchors.verticalCenter: button.verticalCenter
             border.color: "indianred"
             border.width: 2
+
             Text {
                 anchors.centerIn: textRectangle
                 color: "indianred"
@@ -80,7 +81,6 @@ Window {
                          }
                      }
                  }
-
 
         GameBoard {
             id: game
