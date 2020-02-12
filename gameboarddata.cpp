@@ -300,7 +300,6 @@ int GameBoardData::getSizeY()
 bool GameBoardData::ifGameOver()
 {
     if (ifGameOverVertical() && ifGameOverHorizontal()) {
-        qDebug() << "GameOver";
         return true;
     }
     return false;
