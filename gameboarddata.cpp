@@ -298,7 +298,15 @@ int GameBoardData::getSizeY()
 
 bool GameBoardData::ifGameOver()
 {
+<<<<<<< HEAD
     return (ifGameOverVertical() && ifGameOverHorizontal());
+=======
+    if (ifGameOverVertical() && ifGameOverHorizontal()) {
+        return true;
+    }
+    return false;
+
+>>>>>>> 94cb8f9a92f6f986988a0bd165db4f85d0cbe23f
 }
 
 bool GameBoardData::ifGameOverHorizontal()
