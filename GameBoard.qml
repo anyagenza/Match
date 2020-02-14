@@ -17,7 +17,7 @@ GridView {
     anchors.fill: parent
 
     Connections {
-        target:    modelGame
+        target: modelGame
         onNoMatch: {
             firstElement = view.itemAtIndex(firstClickedElement);
             secondElement = view.itemAtIndex(secondClickedElement);
@@ -46,8 +46,7 @@ GridView {
         secondClickedElement = -1;
     }
     function rememberIndex(index) {
-        if (ifClickSecond(index))
-        {
+        if (ifClickSecond(index)) {
             setToNullClicks()
         }
     }
@@ -68,7 +67,6 @@ GridView {
                 anchors.fill: parent
                 onClicked: rememberIndex(index)
             }
-
         }
     }
 

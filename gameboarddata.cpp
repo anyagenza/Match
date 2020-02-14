@@ -24,19 +24,16 @@ GameBoardData::GameBoardData(int sizeX, int sizeY, int colorCount, QObject* pare
     m_score = 0;
     std::uniform_int_distribution<> distr(0, colorCount - 1);
 
-    for (int i = 0; i < m_sizeY; i++)
-    {
+    for (int i = 0; i < m_sizeY; i++) {
         matchHorizontal.append(QList<int>());
         matchVertical.append(QList<int>());
         match.append(QList<int>());
-        for (int j = 0; j < m_sizeX; j++)
-        {
+        for (int j = 0; j < m_sizeX; j++) {
             matchHorizontal[i].append(int());
             matchVertical[i].append(int());
             match[i].append(int());
         }
     }
-
     for (int i = 0; i < m_dimension; i++) {
         int randColorKey = distr(m_eng);
         m_data.push_back(randColorKey);
@@ -83,7 +80,7 @@ void GameBoardData::shuffle()
     emit isScoreChanged();
     beginResetModel();
     while ((m_isMatch) || (ifGameOver())) {
-        for(int i = 0; i < m_dimension; i++) {
+        for (int i = 0; i < m_dimension; i++) {
             int randColorKey = distr(m_eng);
             m_data[i] = randColorKey;
         }
@@ -297,26 +294,16 @@ int GameBoardData::getSizeY()
 }
 
 bool GameBoardData::ifGameOver()
-{
-<<<<<<< HEAD
+{  
     return (ifGameOverVertical() && ifGameOverHorizontal());
-=======
-    if (ifGameOverVertical() && ifGameOverHorizontal()) {
-        return true;
-    }
-    return false;
-
->>>>>>> 94cb8f9a92f6f986988a0bd165db4f85d0cbe23f
 }
 
 bool GameBoardData::ifGameOverHorizontal()
 {
     QList<QList<int>> checkList;
-    for (int i = 0; i < m_sizeY; i++)
-    {
+    for (int i = 0; i < m_sizeY; i++) {
         checkList.append(QList<int>());
-        for (int j = 0; j < m_sizeX; j++)
-        {
+        for (int j = 0; j < m_sizeX; j++) {
             checkList[i].append(int());
         }
     }
@@ -344,7 +331,6 @@ bool GameBoardData::ifGameOverHorizontal()
                     return false;
                 }
             }
-
             if ((checkList[i][j] == checkList[i+1][j+1]) && (checkList[i][j] == checkList[i+1][j+2])) {
                 return false;
             }

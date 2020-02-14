@@ -64,6 +64,7 @@ Window {
         gradient: Gradient {
                      GradientStop {
                          position: 0.0
+
                          SequentialAnimation on color {
                              loops: Animation.Infinite
                              ColorAnimation { from: "DeepSkyBlue"; to: "#0E1533"; duration: 5000 }
@@ -72,6 +73,7 @@ Window {
                      }
                      GradientStop {
                          position: 1.0
+
                          SequentialAnimation on color {
                              loops: Animation.Infinite
                              ColorAnimation { from: "SkyBlue"; to: "#437284"; duration: 5000 }
