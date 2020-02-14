@@ -7,7 +7,6 @@
 #include <QJsonDocument>
 #include <QJsonValue>
 #include <QJsonObject>
-
 #include "gameboarddata.h"
 
 GameBoardData::GameBoardData(int sizeX, int sizeY, int colorCount, QObject* parent) : QAbstractListModel(parent),
@@ -23,7 +22,7 @@ GameBoardData::GameBoardData(int sizeX, int sizeY, int colorCount, QObject* pare
     m_isMatch = 0;
     m_score = 0;
     std::uniform_int_distribution<> distr(0, colorCount - 1);
-
+    
     for (int i = 0; i < m_sizeY; i++)
     {
         matchHorizontal.append(QList<int>());
@@ -36,7 +35,6 @@ GameBoardData::GameBoardData(int sizeX, int sizeY, int colorCount, QObject* pare
             match[i].append(int());
         }
     }
-
     for (int i = 0; i < m_dimension; i++) {
         int randColorKey = distr(m_eng);
         m_data.push_back(randColorKey);
@@ -50,10 +48,10 @@ void GameBoardData::read(QString inp)
     QFile file_obj(inp);
     if (!file_obj.exists()) {
         exit(1);
-
+        
     }
     if (!file_obj.open(QIODevice::ReadOnly|QIODevice::Text)) {
-
+        
         exit(1);
     }
     QTextStream file_text(&file_obj);
@@ -109,7 +107,7 @@ void  GameBoardData::checkMatchHorizontal()
                 countMatch++;
                 j++;
             }
-            for(int k = first; k < first + countMatch + 1; k++) {
+            for (int k = first; k < first + countMatch + 1; k++) {
                 matchHorizontal[i][k] = countMatch + 1;
             }
         }
@@ -245,7 +243,7 @@ void GameBoardData::swapElements(int indexFirst, int indexSecond)
     int temp = copyData[indexFirst];
     copyData[indexFirst] = copyData[indexSecond];
     copyData[indexSecond] = temp;
-
+    
     if (checkMatch(copyData)) {
         moveElements(indexFirst, indexSecond);
     }
@@ -304,11 +302,9 @@ bool GameBoardData::ifGameOver()
 bool GameBoardData::ifGameOverHorizontal()
 {
     QList<QList<int>> checkList;
-    for (int i = 0; i < m_sizeY; i++)
-    {
+    for (int i = 0; i < m_sizeY; i++) {
         checkList.append(QList<int>());
-        for (int j = 0; j < m_sizeX; j++)
-        {
+        for (int j = 0; j < m_sizeX; j++) {
             checkList[i].append(int());
         }
     }
@@ -336,7 +332,7 @@ bool GameBoardData::ifGameOverHorizontal()
                     return false;
                 }
             }
-
+            
             if ((checkList[i][j] == checkList[i+1][j+1]) && (checkList[i][j] == checkList[i+1][j+2])) {
                 return false;
             }
@@ -348,20 +344,18 @@ bool GameBoardData::ifGameOverHorizontal()
             }
         }
     }
-
+    
     return true;
-
-
+    
+    
 }
 
 bool GameBoardData::ifGameOverVertical()
 {
     QList<QList<int>> checkList;
-    for (int i = 0; i < m_sizeX; i++)
-    {
+    for (int i = 0; i < m_sizeX; i++) {
         checkList.append(QList<int>());
-        for (int j = 0; j < m_sizeY; j++)
-        {
+        for (int j = 0; j < m_sizeY; j++) {
             checkList[i].append(int());
         }
     }

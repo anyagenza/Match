@@ -7,13 +7,11 @@ Window {
     visible: true
     width: 480
     height: 640
-
     property var windowWidth : width;
     property var windowHeight : height;
 
     Rectangle {
         id: labelRectangle
-
         gradient: Gradient {
                 GradientStop { position: 0.0; color: "red" }
                 GradientStop { position: 0.33; color: "yellow" }
@@ -35,7 +33,7 @@ Window {
             Text {
                 anchors.centerIn: textRectangle
                 color: "indianred"
-                text: game.model.score.toString()
+                text: game.model.score
             }
         }
 

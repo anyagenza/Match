@@ -4,7 +4,7 @@
 #include <regex>
 #include <random>
 
-struct Inx {
+struct Position {
     int y;
     int x;
 };
@@ -26,7 +26,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     bool getIsMatch();
-    void read(std::string inp = ":/input.json");
+    void read(QString inp = ":/input.json");
     int getScore();
     int getSizeX();
     int getSizeY();
@@ -34,7 +34,7 @@ public:
 private:
     bool ifNear(int first, int second) const;
     bool checkMatch(QList<int>& data);
-    void checkMatchHorisontal();
+    void checkMatchHorizontal();
     void checkMatchVertical();
     void clear();
     void setMatchToNull();
@@ -49,18 +49,17 @@ signals:
 
 private:
     QList<int> m_data;
-    QList<QList<int>> matchHorisontal;
+    QList<QList<int>> matchHorizontal;
     QList<QList<int>> matchVertical;
     QList<QList<int>> match;
     QMap<int, QString> m_colorKey;
-    QList<Inx> indexForDelete;
+    QList<Position> indexForDelete;
     int m_sizeX;
     int m_sizeY;
     int m_dimension;
     int m_colorCount;
-    bool isMatch;
-    std::random_device rd;
-    std::mt19937 eng;
-public:
-    int score;
+    bool m_isMatch;
+    std::random_device m_rd;
+    std::mt19937 m_eng;
+    int m_score;
 };
